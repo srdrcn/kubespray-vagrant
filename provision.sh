@@ -37,19 +37,4 @@ chown vagrant ${VAGRANT_HOME}/.kube/config
 sed "s/127.0.0.1/$IP/" /etc/kubernetes/admin.conf > /vagrant/kubeconfig_for_host_os
 
 
-echo "### Install Helm3"
-curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
-chmod 700 get_helm.sh
-./get_helm.sh
-sleep 5
-echo "### Install Prometheus-Grafana Stack"
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-sleep 5
-kubectl create ns monitoring
-helm install promgraf  prometheus-community/kube-prometheus-stack -n monitoring
-sleep 5
-kubectl --namespace monitoring patch svc promgraf-grafana -p '{"spec": {"type": "NodePort"}}'
-echo "###Grafana User:Pass
-admin:prom-operator"
-kubectl get svc promgraf-grafana -n monitoring
-kubectl apply -f https://raw.githubusercontent.com/srdrcn/kubespray-vagrant/main/kube-dash/rbac.yml
+

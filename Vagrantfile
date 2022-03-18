@@ -24,4 +24,5 @@ Vagrant.configure("2") do |config|
   config.vm.network "forwarded_port", id: "ssh", guest: 22, host: CONFIG_YAML["ssh_forward_port"]
 
   config.vm.provision "shell", path: "provision.sh", env: {IP: CONFIG_YAML["address"], APT_REGION: CONFIG_YAML["apt_region"]}
+  config.vm.provision "shell", path: "monitoring.sh"
 end
