@@ -14,7 +14,5 @@ kubectl create ns monitoring
 helm install promgraf  prometheus-community/kube-prometheus-stack -n monitoring  --values values.yml
 sleep 5
 kubectl --namespace monitoring patch svc promgraf-grafana -p '{"spec": {"type": "NodePort"}}'
-echo "###Grafana User:Pass
-admin:admin"
+echo "###Grafana User:Pass admin:admin"
 kubectl get svc promgraf-grafana -n monitoring
-kubectl apply -f https://raw.githubusercontent.com/srdrcn/kubespray-vagrant/main/kube-dash/rbac.yml
