@@ -1,0 +1,47 @@
+# -------------------Anonymous Cluser Role/RoleBinding ------------------- #
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kubernetes-dashboard-anonymous
+rules:
+- apiGroups:
+  - ""
+  resourceNames:
+  - 'https:kubernetes-dashboard:'
+  resources:
+  - services/proxy
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+- nonResourceURLs:
+  - /ui
+  - /ui/*
+  - /api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/*
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+namespace: 
+metadata:
+  name: kubernetes-dashboard-anonymous
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kubernetes-dashboard-anonymous
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: User
+  name: system:anonymous
