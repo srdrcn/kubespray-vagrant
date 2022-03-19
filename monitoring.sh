@@ -20,8 +20,8 @@ sed -i "s/range/$IPRANGE/" configmap.yml
 kubectl apply -f configmap.yml
 kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
 kubectl apply -f metallb.yml
-echo "###Grafana User:Pass"
-# admin:admin
-sleep 10
-echo "Grafana Access IP"
+echo "### Grafana User:Pass"
+echo "### admin:admin"
+sleep 15
+echo "### Grafana Access IP"
 kubectl get svc promgraf-grafana -n monitoring  -o jsonpath="{.status.loadBalancer.ingress[*].ip}"
