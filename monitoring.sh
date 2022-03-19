@@ -1,7 +1,7 @@
 #!/bin/sh
 
 git clone https://github.com/srdrcn/kubespray-vagrant /opt/kubespray-vagrant
-cd opt/kubespray-vagrant
+cd /opt/kubespray-vagrant
 echo "### Install Helm3"
 curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
 chmod 700 get_helm.sh
