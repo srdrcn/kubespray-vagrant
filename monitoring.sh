@@ -1,11 +1,4 @@
 #!/bin/sh
-   n=0
-   until [ $n -ge 5 ]
-   do
-      git clone https://github.com/srdrcn/kubespray-vagrant /opt/kubespray-vagrant && break
-      n=$[$n+1]
-      sleep 5
-   done
 cd /opt/kubespray-vagrant
 echo "### Install Helm3"
 curl --retry 5 --max-time 10 -Lk https://get.helm.sh/helm-v3.6.3-linux-amd64.tar.gz | tar zxv -C /tmp
@@ -27,7 +20,8 @@ sed -i "s/range/$IPRANGE/" configmap.yml
 kubectl apply -f configmap.yml
 kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
 kubectl apply -f metallb.yml
-echo "###Grafana User:Pass admin:admin"
+echo "###Grafana User:Pass"
+# admin:admin
 sleep 10
-"Grafana Access IP"
+echo "Grafana Access IP"
 kubectl get svc promgraf-grafana -n monitoring  -o jsonpath="{.status.loadBalancer.ingress[*].ip}"

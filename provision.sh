@@ -12,6 +12,8 @@ apt-get update && apt-get install -y python3-pip
 
 # clone kubespray kubernetes ver 1.18
 git clone -b release-2.14 https://github.com/srdrcn/kubespray.git /opt/kubespray
+# monitoring repo pull
+git clone https://github.com/srdrcn/kubespray-vagrant /opt/kubespray-vagrant
 cd /opt/kubespray
 
 # install required packages
