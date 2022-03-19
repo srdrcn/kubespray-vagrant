@@ -24,4 +24,4 @@ echo "### Grafana User:Pass"
 echo "### admin:admin"
 sleep 15
 echo "### Grafana Access IP"
-kubectl get svc promgraf-grafana -n monitoring  -o jsonpath="{.status.loadBalancer.ingress[*].ip}"
+kubectl get svc promgraf-grafana -n monitoring | awk '{print $4}'
