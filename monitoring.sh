@@ -20,8 +20,35 @@ sed -i "s/range/$IPRANGE/" configmap.yml
 kubectl apply -f configmap.yml
 kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
 kubectl apply -f metallb.yml
-echo "Please wait LB IP will be assigned"
-sleep 70
+
+### Check MetalLB Status
+metal=0
+while [ "$(kubectl get pods -l=component='speaker' -n metallb-system -o jsonpath='{.items[*].status.containerStatuses[0].ready}')" != "true" ] ||
+	[ "$(kubectl get pods -l=component='controller' -n metallb-system -o jsonpath='{.items[*].status.containerStatuses[0].ready}')" != "true" ]; do
+
+
+   if [ $metal -eq 10 ]; then
+	    echo "Please Check MetalLB Pod Status"
+	   break
+   fi
+        metal=$(($metal+1))
+sleep 10
+echo "Please Wait MetalLB Pod to be ready.."
+done
+
+### Check Grafana Status
+grafana=0
+while [ "$(kubectl get pods -l='app.kubernetes.io/name=grafana' -n monitoring -o jsonpath='{.items[*].status.containerStatuses[1].ready}')" != "true" ] ; do
+   
+   if [ $grafana -eq 10 ]; then
+	    echo "Please Check Grafana Pod Status"
+	   break
+   fi
+        grafana=$(($grafana+1))
+sleep 10
+echo "Please Wait Grafana Pod to be ready.."
+done
+
 echo "### Grafana Access IP"
 kubectl get svc promgraf-grafana -n monitoring | awk '{print $4}'
 echo "### Grafana User:Pass"
