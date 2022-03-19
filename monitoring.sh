@@ -16,7 +16,7 @@ sleep 5
 kubectl --namespace monitoring patch svc promgraf-grafana -p '{"spec": {"type": "NodePort"}}'
 echo "### Install MetalLB"
 cd ../metallb
-kubectl create ns metallb
+kubectl create ns metallb-system
 sed -i "s/range/$IPRANGE/" configmap.yml
 kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
 kubectl apply -f metallb.yml
