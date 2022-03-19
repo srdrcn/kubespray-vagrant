@@ -3,9 +3,11 @@
 git clone https://github.com/srdrcn/kubespray-vagrant /opt/kubespray-vagrant
 cd /opt/kubespray-vagrant
 echo "### Install Helm3"
-curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
-chmod 700 get_helm.sh
-./get_helm.sh
+curl https://baltocdn.com/helm/signing.asc | sudo apt-key add -
+sudo apt-get install apt-transport-https --yes
+echo "deb https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+sudo apt-get update
+sudo apt-get install helm
 sleep 5
 echo "### Install Prometheus-Grafana Stack"
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts 
@@ -23,6 +25,6 @@ kubectl apply -f configmap.yml
 kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
 kubectl apply -f metallb.yml
 echo "###Grafana User:Pass admin:admin"
-sleep 5 
+sleep 10
 "Grafana Access IP"
 kubectl get svc promgraf-grafana -n monitoring  -o jsonpath="{.status.loadBalancer.ingress[*].ip}"
