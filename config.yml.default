@@ -1,4 +1,5 @@
 address: "192.168.56.101"
+lbiprange: "192.168.56.120-192.168.56.130"
 ssh_forward_port: 22202
 cpus: 4
 memory_mb: 4096

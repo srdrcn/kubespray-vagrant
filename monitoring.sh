@@ -1,6 +1,6 @@
 #!/bin/sh
 
-git clone https://github.com/srdrcn/kubespray-vagrant
+git clone https://github.com/srdrcn/kubespray-vagrant 
 echo "### Install Helm3"
 curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
 chmod 700 get_helm.sh
@@ -14,5 +14,13 @@ kubectl create ns monitoring
 helm install promgraf  prometheus-community/kube-prometheus-stack -n monitoring  --values values.yml
 sleep 5
 kubectl --namespace monitoring patch svc promgraf-grafana -p '{"spec": {"type": "NodePort"}}'
+echo "### Install MetalLB"
+cd ../metallb
+kubectl create ns metallb
+sed -i "s/range/$IPRANGE/" configmap.yml
+kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
+kubectl apply -f metallb.yml
 echo "###Grafana User:Pass admin:admin"
-kubectl get svc promgraf-grafana -n monitoring
+sleep 5 
+"Grafana Access IP"
+kubectl get svc promgraf-grafana -n monitoring  -o jsonpath="{.status.loadBalancer.ingress[*].ip}"
