@@ -1,13 +1,16 @@
 #!/bin/sh
-
-git clone https://github.com/srdrcn/kubespray-vagrant /opt/kubespray-vagrant
+   n=0
+   until [ $n -ge 5 ]
+   do
+      git clone https://github.com/srdrcn/kubespray-vagrant /opt/kubespray-vagrant && break
+      n=$[$n+1]
+      sleep 5
+   done
 cd /opt/kubespray-vagrant
 echo "### Install Helm3"
-curl https://baltocdn.com/helm/signing.asc | sudo apt-key add -
-sudo apt-get install apt-transport-https --yes
-echo "deb https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
-sudo apt-get update
-sudo apt-get install helm
+curl --retry 5 --max-time 10 -Lk https://get.helm.sh/helm-v3.6.3-linux-amd64.tar.gz | tar zxv -C /tmp
+mv /tmp/linux-amd64/helm /usr/local/bin/helm && rm -rf /tmp/linux-amd64
+chmod +x /usr/local/bin/helm
 sleep 5
 echo "### Install Prometheus-Grafana Stack"
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts 
